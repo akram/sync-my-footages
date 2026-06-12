@@ -28,7 +28,7 @@ enum DestinationAnalyzer {
     static func analyze(
         sourceFiles: [FootageFile],
         destination: URL,
-        deviceType: DJIDeviceType,
+        deviceType: CaptureDeviceType,
         pattern: String,
         progressHandler: @escaping @Sendable (String, Double) -> Void
     ) async -> AnalysisResult {

@@ -4,7 +4,7 @@ import SwiftUI
 struct SyncConfigView: View {
     @Environment(AppState.self) private var appState
 
-    let device: DJIDevice
+    let device: CaptureDevice
 
     @State private var selectedDestinations: Set<String> = [] {
         didSet { saveSelectedDestinations() }

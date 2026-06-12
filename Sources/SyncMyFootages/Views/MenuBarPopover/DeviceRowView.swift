@@ -2,7 +2,7 @@ import SwiftUI
 
 struct DeviceRowView: View {
     @Environment(AppState.self) private var appState
-    let device: DJIDevice
+    let device: CaptureDevice
 
     private var isSyncing: Bool {
         appState.activeSyncJobs.contains { $0.device == device && $0.status.isActive }

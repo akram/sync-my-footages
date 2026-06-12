@@ -1,7 +1,7 @@
 import Foundation
 
 /// Represents a type of DJI capture device
-enum DJIDeviceType: String, Codable, CaseIterable, Sendable {
+enum CaptureDeviceType: String, Codable, CaseIterable, Sendable {
     case osmoPocket3 = "Osmo Pocket 3"
     case action5Pro = "Osmo Action 5 Pro"
     case neo2 = "Neo 2"
@@ -18,11 +18,11 @@ enum DJIDeviceType: String, Codable, CaseIterable, Sendable {
 }
 
 /// A DJI device currently connected via USB or SD card adapter
-struct DJIDevice: Identifiable, Hashable, Sendable {
+struct CaptureDevice: Identifiable, Hashable, Sendable {
     let id: String
     let volumePath: URL
     let volumeName: String
-    let deviceType: DJIDeviceType
+    let deviceType: CaptureDeviceType
     let dcimFolders: [URL]
     let storageType: StorageType
 
@@ -32,7 +32,7 @@ struct DJIDevice: Identifiable, Hashable, Sendable {
         case unknown = "Unknown"
     }
 
-    init(volumePath: URL, volumeName: String, deviceType: DJIDeviceType, dcimFolders: [URL], storageType: StorageType = .unknown) {
+    init(volumePath: URL, volumeName: String, deviceType: CaptureDeviceType, dcimFolders: [URL], storageType: StorageType = .unknown) {
         self.id = volumePath.path
         self.volumePath = volumePath
         self.volumeName = volumeName

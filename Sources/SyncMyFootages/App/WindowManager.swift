@@ -8,7 +8,7 @@ final class WindowManager {
 
     private var windows: [String: NSWindow] = [:]
 
-    func openSyncConfig(device: DJIDevice, appState: AppState) {
+    func openSyncConfig(device: CaptureDevice, appState: AppState) {
         let windowID = "sync-config-\(device.id)"
 
         if let existing = windows[windowID] {

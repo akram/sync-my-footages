@@ -14,7 +14,7 @@ enum FileOrganizer {
     /// Tokens: {device}, {year}, {month}, {day}, {type}
     static func expandPattern(
         _ pattern: String,
-        deviceType: DJIDeviceType,
+        deviceType: CaptureDeviceType,
         captureDate: Date,
         fileExtension: String = "MP4"
     ) -> String {
@@ -33,7 +33,7 @@ enum FileOrganizer {
     /// Build destination path for a footage file
     static func destinationPath(
         destinationRoot: URL,
-        deviceType: DJIDeviceType,
+        deviceType: CaptureDeviceType,
         file: FootageFile,
         pattern: String? = nil
     ) -> URL {
@@ -49,7 +49,7 @@ enum FileOrganizer {
     /// Build the directory portion of the destination (without filename)
     static func destinationDirectory(
         destinationRoot: URL,
-        deviceType: DJIDeviceType,
+        deviceType: CaptureDeviceType,
         captureDate: Date,
         fileExtension: String = "MP4",
         pattern: String? = nil
@@ -68,7 +68,7 @@ enum FileOrganizer {
     /// Generate preview strings showing what the pattern produces
     static func patternPreview(
         _ pattern: String,
-        deviceType: DJIDeviceType = .osmoPocket3,
+        deviceType: CaptureDeviceType = .osmoPocket3,
         date: Date = Date()
     ) -> String {
         if pattern.contains("{type}") {
@@ -89,7 +89,7 @@ enum FileOrganizer {
     /// Idempotent: running multiple times produces the same result.
     static func reorganize(
         directory: URL,
-        deviceType: DJIDeviceType,
+        deviceType: CaptureDeviceType,
         fromPattern: String,
         toPattern: String,
         separator: String = " - ",
@@ -327,7 +327,7 @@ enum FileOrganizer {
     }
 
     /// Scan a capture device for all footage files
-    static func scanDevice(_ device: DJIDevice) throws -> [FootageFile] {
+    static func scanDevice(_ device: CaptureDevice) throws -> [FootageFile] {
         let fm = FileManager.default
         var files: [FootageFile] = []
 

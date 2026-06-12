@@ -3,13 +3,13 @@ import Foundation
 /// Represents an active or completed sync operation
 struct SyncJob: Identifiable, Sendable {
     let id: UUID
-    let device: DJIDevice
+    let device: CaptureDevice
     let destinationPath: String
     let startTime: Date
     var status: SyncStatus
     var progress: SyncProgress
 
-    init(device: DJIDevice, destinationPath: String) {
+    init(device: CaptureDevice, destinationPath: String) {
         self.id = UUID()
         self.device = device
         self.destinationPath = destinationPath

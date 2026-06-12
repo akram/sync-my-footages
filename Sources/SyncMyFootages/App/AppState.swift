@@ -5,7 +5,7 @@ import Observation
 @Observable
 final class AppState {
     // MARK: - Connected devices
-    var connectedDevices: [DJIDevice] = []
+    var connectedDevices: [CaptureDevice] = []
 
     // MARK: - Active sync jobs
     var activeSyncJobs: [SyncJob] = []
@@ -23,7 +23,7 @@ final class AppState {
     }
 
     // MARK: - UI state
-    var selectedDeviceForSync: DJIDevice?
+    var selectedDeviceForSync: CaptureDevice?
 
     // MARK: - Services
     private(set) var diskWatcher: DiskWatcher?
@@ -141,7 +141,7 @@ final class AppState {
     nonisolated(unsafe) private static let lastSyncKey = "lastSyncTimestamps"
 
     /// Get the latest modification timestamp of a device's DCIM folders
-    nonisolated private func sourceModTimestamp(_ device: DJIDevice) -> TimeInterval {
+    nonisolated private func sourceModTimestamp(_ device: CaptureDevice) -> TimeInterval {
         var latest: TimeInterval = 0
         for folder in device.dcimFolders {
             if let attrs = try? FileManager.default.attributesOfItem(atPath: folder.path),
@@ -172,7 +172,7 @@ final class AppState {
     }
 
     /// Check if source has changed since last sync to this destination
-    nonisolated private func sourceHasChanged(device: DJIDevice, destinationPath: String) -> Bool {
+    nonisolated private func sourceHasChanged(device: CaptureDevice, destinationPath: String) -> Bool {
         let uuid = volumeUUID(for: device.volumePath)
         let key = "\(uuid):\(destinationPath)"
         guard let data = UserDefaults.standard.data(forKey: Self.lastSyncKey),
@@ -185,7 +185,7 @@ final class AppState {
     }
 
     /// Record that we synced this source to this destination
-    nonisolated private func recordSyncTimestamp(device: DJIDevice, destinationPath: String) {
+    nonisolated private func recordSyncTimestamp(device: CaptureDevice, destinationPath: String) {
         let uuid = volumeUUID(for: device.volumePath)
         let key = "\(uuid):\(destinationPath)"
         var saved: [String: TimeInterval]
@@ -204,7 +204,7 @@ final class AppState {
     // MARK: - Sync
 
     /// Sync only new files (not already present on destination)
-    func syncDevice(_ device: DJIDevice, to destinationPath: String, onlyFiles: [(file: FootageFile, destPath: String)]? = nil) {
+    func syncDevice(_ device: CaptureDevice, to destinationPath: String, onlyFiles: [(file: FootageFile, destPath: String)]? = nil) {
         let job = SyncJob(device: device, destinationPath: destinationPath)
         activeSyncJobs.append(job)
         let jobID = job.id

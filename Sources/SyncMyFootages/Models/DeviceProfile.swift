@@ -3,7 +3,7 @@ import Foundation
 /// User-configured profile for a capture device type
 struct DeviceProfile: Identifiable, Codable, Hashable, Sendable {
     var id: String { deviceType.rawValue }
-    let deviceType: DJIDeviceType
+    let deviceType: CaptureDeviceType
     var syncBehavior: SyncBehavior
     var defaultDestinationID: String?
 
@@ -14,7 +14,7 @@ struct DeviceProfile: Identifiable, Codable, Hashable, Sendable {
     }
 
     static var defaults: [DeviceProfile] {
-        DJIDeviceType.allCases.compactMap { type in
+        CaptureDeviceType.allCases.compactMap { type in
             guard type != .unknown else { return nil }
             return DeviceProfile(deviceType: type, syncBehavior: .confirmFirst)
         }

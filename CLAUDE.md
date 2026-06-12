@@ -42,7 +42,7 @@ swift test
 ```
 Sources/SyncMyFootages/
 ├── App/           — SyncMyFootagesApp, AppState, WindowManager
-├── Models/        — DJIDevice, FootageFile, SyncJob, JournalEntry, etc.
+├── Models/        — CaptureDevice, FootageFile, SyncJob, JournalEntry, etc.
 ├── Services/      — Core logic (FileOrganizer, RsyncEngine, DeviceIdentifier, etc.)
 ├── Views/         — SwiftUI views (MenuBar, Settings, Sync, Redundancy, etc.)
 └── Utilities/     — DJIFilenameParser, Constants

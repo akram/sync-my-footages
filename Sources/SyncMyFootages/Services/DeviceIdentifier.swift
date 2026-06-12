@@ -4,7 +4,7 @@ import AVFoundation
 /// Identifies capture devices from mounted volume paths
 enum DeviceIdentifier {
     /// Check if a mounted volume is a footage source (not a sync destination)
-    static func identify(volumePath: URL) -> DJIDevice? {
+    static func identify(volumePath: URL) -> CaptureDevice? {
         let fm = FileManager.default
 
         // Skip volumes that are sync destinations (contain our journal file)
@@ -36,7 +36,7 @@ enum DeviceIdentifier {
         let deviceType = inferDeviceType(from: djiDirs)
         let storageType = inferStorageType(volumePath: volumePath)
 
-        return DJIDevice(
+        return CaptureDevice(
             volumePath: volumePath,
             volumeName: volumePath.lastPathComponent,
             deviceType: deviceType,
@@ -47,7 +47,7 @@ enum DeviceIdentifier {
 
     /// Also detect footage in non-DCIM folders (e.g. already-copied files)
     /// Returns nil if this doesn't look like a DJI source
-    static func identifyFromVideoFiles(in folderURL: URL) -> DJIDeviceType? {
+    static func identifyFromVideoFiles(in folderURL: URL) -> CaptureDeviceType? {
         let fm = FileManager.default
         guard let files = try? fm.contentsOfDirectory(at: folderURL, includingPropertiesForKeys: nil) else {
             return nil
@@ -60,7 +60,7 @@ enum DeviceIdentifier {
     }
 
     /// Infer device type by reading video file metadata (encoder tag)
-    private static func inferDeviceType(from djiDirs: [URL]) -> DJIDeviceType {
+    private static func inferDeviceType(from djiDirs: [URL]) -> CaptureDeviceType {
         let fm = FileManager.default
 
         for dir in djiDirs {
@@ -82,7 +82,7 @@ enum DeviceIdentifier {
     /// Read the encoder/model tag from an MP4 file using AVFoundation
     /// Runs entirely off the main thread to avoid deadlocks
     /// DJI stores model in the ©too (encoder) tag, e.g. "DJI OsmoPocket3"
-    private static func readDeviceTypeFromMetadata(_ videoURL: URL) -> DJIDeviceType? {
+    private static func readDeviceTypeFromMetadata(_ videoURL: URL) -> CaptureDeviceType? {
         let box = SendableBox()
         let semaphore = DispatchSemaphore(value: 0)
 
@@ -116,13 +116,13 @@ enum DeviceIdentifier {
     /// Thread-safe box for passing result across concurrency boundaries
     private final class SendableBox: @unchecked Sendable {
         private let lock = NSLock()
-        private var value: DJIDeviceType?
-        func set(_ v: DJIDeviceType) { lock.lock(); value = v; lock.unlock() }
-        func get() -> DJIDeviceType? { lock.lock(); defer { lock.unlock() }; return value }
+        private var value: CaptureDeviceType?
+        func set(_ v: CaptureDeviceType) { lock.lock(); value = v; lock.unlock() }
+        func get() -> CaptureDeviceType? { lock.lock(); defer { lock.unlock() }; return value }
     }
 
     /// Match a metadata model string to a DJI device type
-    private static func matchDeviceType(from modelString: String) -> DJIDeviceType? {
+    private static func matchDeviceType(from modelString: String) -> CaptureDeviceType? {
         let model = modelString.lowercased()
 
         if model.contains("pocket3") || model.contains("pocket 3") {
@@ -150,7 +150,7 @@ enum DeviceIdentifier {
     }
 
     /// Determine storage type using diskutil info
-    private static func inferStorageType(volumePath: URL) -> DJIDevice.StorageType {
+    private static func inferStorageType(volumePath: URL) -> CaptureDevice.StorageType {
         let diskutilInfo = getDiskutilInfo(volumePath: volumePath)
 
         if let protocol_ = diskutilInfo["Protocol"] {
@@ -223,7 +223,7 @@ enum DeviceIdentifier {
     }
 
     /// Scan all currently mounted volumes for capture devices
-    static func scanMountedVolumes() -> [DJIDevice] {
+    static func scanMountedVolumes() -> [CaptureDevice] {
         let fm = FileManager.default
         guard let volumes = fm.mountedVolumeURLs(
             includingResourceValuesForKeys: [.volumeNameKey],
