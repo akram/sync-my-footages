@@ -413,6 +413,13 @@ final class AppState {
                 updateJob(jobID) { $0.status = .failed("\(error)") }
             }
             syncTasks.removeValue(forKey: jobID)
+
+            // Auto-cleanup: keep max 3 inactive jobs
+            let inactive = activeSyncJobs.filter { !$0.status.isActive }
+            if inactive.count > 3 {
+                let toRemove = inactive.prefix(inactive.count - 3)
+                activeSyncJobs.removeAll { job in toRemove.contains { $0.id == job.id } }
+            }
         }
         syncTasks[jobID] = task
     }

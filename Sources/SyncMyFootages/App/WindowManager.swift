@@ -170,7 +170,7 @@ final class WindowManager {
         let delegate = WindowCleanupDelegate { [weak self] in
             self?.windows.removeValue(forKey: windowID)
         }
-        objc_setAssociatedObject(window, "delegate", delegate, .OBJC_ASSOCIATION_RETAIN)
+        objc_setAssociatedObject(window, "delegate", delegate, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         window.delegate = delegate
 
         windows[id] = window
@@ -178,7 +178,7 @@ final class WindowManager {
     }
 }
 
-/// Per-window delegate that cleans up the WindowManager reference on close
+/// Per-window delegate that cleans up the WindowManager reference and frees SwiftUI views on close
 private final class WindowCleanupDelegate: NSObject, NSWindowDelegate {
     let onClose: () -> Void
 
@@ -187,6 +187,10 @@ private final class WindowCleanupDelegate: NSObject, NSWindowDelegate {
     }
 
     func windowWillClose(_ notification: Notification) {
+        // Free the SwiftUI hosting view to release memory
+        if let window = notification.object as? NSWindow {
+            window.contentView = nil
+        }
         onClose()
     }
 }
