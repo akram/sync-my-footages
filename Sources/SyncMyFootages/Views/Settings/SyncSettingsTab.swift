@@ -110,24 +110,71 @@ struct SyncSettingsTab: View {
         let pattern = organizationPattern
 
         let accessing = directory.startAccessingSecurityScopedResource()
-        let deviceType = DeviceIdentifier.identifyFromVideoFiles(in: directory) ?? .osmoPocket3
 
         Task.detached {
-            let result = FileOrganizer.reorganize(
-                directory: directory,
-                deviceType: deviceType,
-                fromPattern: pattern,
-                toPattern: pattern
-            ) { file, _ in
-                Task { @MainActor in
-                    reorganizeProgress = file
+            var totalMoved = 0
+            var totalSkipped = 0
+            var totalErrors = 0
+
+            // If the pattern contains {device}, reorganize each device subfolder separately
+            // to avoid mixing files from different devices
+            if pattern.contains("{device}") {
+                let fm = FileManager.default
+                let knownDeviceNames = CaptureDeviceType.allCases.map {
+                    $0.rawValue.replacingOccurrences(of: " ", with: "")
                 }
+
+                if let contents = try? fm.contentsOfDirectory(atPath: directory.path) {
+                    for name in contents {
+                        let subdir = directory.appendingPathComponent(name)
+                        var isDir: ObjCBool = false
+                        guard fm.fileExists(atPath: subdir.path, isDirectory: &isDir), isDir.boolValue else { continue }
+
+                        // Check if this subdirectory is a known device folder
+                        if let deviceType = CaptureDeviceType.allCases.first(where: {
+                            $0.rawValue.replacingOccurrences(of: " ", with: "") == name
+                        }) {
+                            await MainActor.run {
+                                self.reorganizeProgress = "Reorganizing \(name)..."
+                            }
+                            let result = FileOrganizer.reorganize(
+                                directory: subdir,
+                                deviceType: deviceType,
+                                fromPattern: pattern,
+                                toPattern: pattern
+                            ) { file, _ in
+                                Task { @MainActor in
+                                    self.reorganizeProgress = "\(name): \(file)"
+                                }
+                            }
+                            totalMoved += result.moved
+                            totalSkipped += result.skipped
+                            totalErrors += result.errors
+                        }
+                    }
+                }
+            } else {
+                // No {device} in pattern — reorganize the whole directory
+                let deviceType = DeviceIdentifier.identifyFromVideoFiles(in: directory) ?? .osmoPocket3
+                let result = FileOrganizer.reorganize(
+                    directory: directory,
+                    deviceType: deviceType,
+                    fromPattern: pattern,
+                    toPattern: pattern
+                ) { file, _ in
+                    Task { @MainActor in
+                        self.reorganizeProgress = file
+                    }
+                }
+                totalMoved = result.moved
+                totalSkipped = result.skipped
+                totalErrors = result.errors
             }
 
             await MainActor.run {
                 if accessing { directory.stopAccessingSecurityScopedResource() }
                 isReorganizing = false
-                reorganizeResult = "\(result.moved) moved, \(result.skipped) unchanged, \(result.errors) errors"
+                reorganizeResult = "\(totalMoved) moved, \(totalSkipped) unchanged, \(totalErrors) errors"
             }
         }
     }
