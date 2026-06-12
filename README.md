@@ -20,6 +20,12 @@ Native macOS menu bar app for syncing DJI video rushes to external drives with S
 - **Source change detection** — skip sync entirely if nothing changed (via Volume UUID)
 - **Additive only** — never deletes files from destinations
 
+## Screenshots
+
+| Redundancy Dashboard | File Type Mapping |
+|:---:|:---:|
+| ![Dashboard](docs/images/redundancy-dashboard.png) | ![File Types](docs/images/file-types-settings.png) |
+
 ## Install
 
 ### From GitHub Releases
@@ -60,7 +66,7 @@ bash scripts/package.sh
 1. **Configure a destination** — Open the menu bar popover, click More > Settings > Destinations, add your external drive
 2. **Connect your DJI device** — Plug in via USB or insert the SD card
 3. **Click Sync** — Files are copied to `{device}/{date}/{type}/` on your destination
-4. **Add project metadata** — Create a `PROJECT.md` in a date folder to label it:
+4. **Add project metadata** — Create a `PROJECT.md` in a date folder:
 
 ```markdown
 ---
@@ -68,11 +74,18 @@ title: Morocco Trip
 ---
 ```
 
-Then click More > Settings > Sync > Reorganize to rename the folder to `20251222 - Morocco Trip`.
+Then use Reorganize (Settings > Sync) to rename the folder to `20251222 - Morocco Trip`.
 
 ## Documentation
 
-See [docs/guide.md](docs/guide.md) for detailed usage guide.
+See [docs/guide.md](docs/guide.md) for the detailed user guide covering:
+- File organization patterns and tokens
+- File type mapping configuration
+- PROJECT.md workflow
+- Journal and hash cache system
+- Performance optimizations
+- Duplicate scanner
+- Demo mode
 
 ## License
 
