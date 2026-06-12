@@ -116,7 +116,7 @@ enum DuplicateScanner {
         for case let fileURL as URL in enumerator {
             guard let values = try? fileURL.resourceValues(forKeys: [.isRegularFileKey, .fileSizeKey]),
                   values.isRegularFile == true else { continue }
-            if DJIFilenameParser.isDJIFile(fileURL.lastPathComponent) {
+            if CaptureDeviceFilenameParser.isDJIFile(fileURL.lastPathComponent) {
                 files.append(FileInfo(url: fileURL, size: Int64(values.fileSize ?? 0)))
             }
         }

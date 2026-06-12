@@ -3,10 +3,10 @@ import Testing
 @testable import SyncMyFootages
 
 @Suite("DJI Filename Parser")
-struct DJIFilenameParserTests {
+struct CaptureDeviceFilenameParserTests {
     @Test("Parses standard DJI MP4 filename")
     func parseStandardMP4() {
-        let result = DJIFilenameParser.parse("DJI_20251222073342_0001_D.MP4")
+        let result = CaptureDeviceFilenameParser.parse("DJI_20251222073342_0001_D.MP4")
         #expect(result != nil)
         #expect(result?.sequenceNumber == 1)
         #expect(result?.colorProfile == "D")
@@ -25,7 +25,7 @@ struct DJIFilenameParserTests {
 
     @Test("Parses LRF filename")
     func parseLRF() {
-        let result = DJIFilenameParser.parse("DJI_20251222073342_0001_D.LRF")
+        let result = CaptureDeviceFilenameParser.parse("DJI_20251222073342_0001_D.LRF")
         #expect(result != nil)
         #expect(result?.fileExtension == "LRF")
         #expect(result?.clipID == "20251222073342_0001_D")
@@ -33,14 +33,14 @@ struct DJIFilenameParserTests {
 
     @Test("Parses WAV filename")
     func parseWAV() {
-        let result = DJIFilenameParser.parse("DJI_20251222073342_0001_D.WAV")
+        let result = CaptureDeviceFilenameParser.parse("DJI_20251222073342_0001_D.WAV")
         #expect(result != nil)
         #expect(result?.fileExtension == "WAV")
     }
 
     @Test("Parses Normal color profile with N suffix")
     func parseNormalProfile() {
-        let result = DJIFilenameParser.parse("DJI_20260101120000_0042_N.MP4")
+        let result = CaptureDeviceFilenameParser.parse("DJI_20260101120000_0042_N.MP4")
         #expect(result != nil)
         #expect(result?.colorProfile == "N")
         #expect(result?.sequenceNumber == 42)
@@ -48,24 +48,24 @@ struct DJIFilenameParserTests {
 
     @Test("Related files share same clipID")
     func clipGrouping() {
-        let mp4 = DJIFilenameParser.parse("DJI_20251222073342_0001_D.MP4")
-        let lrf = DJIFilenameParser.parse("DJI_20251222073342_0001_D.LRF")
-        let wav = DJIFilenameParser.parse("DJI_20251222073342_0001_D.WAV")
+        let mp4 = CaptureDeviceFilenameParser.parse("DJI_20251222073342_0001_D.MP4")
+        let lrf = CaptureDeviceFilenameParser.parse("DJI_20251222073342_0001_D.LRF")
+        let wav = CaptureDeviceFilenameParser.parse("DJI_20251222073342_0001_D.WAV")
         #expect(mp4?.clipID == lrf?.clipID)
         #expect(mp4?.clipID == wav?.clipID)
     }
 
     @Test("Rejects non-DJI filenames")
     func rejectNonDJI() {
-        #expect(DJIFilenameParser.parse("IMG_1234.JPG") == nil)
-        #expect(DJIFilenameParser.parse("video.mp4") == nil)
-        #expect(DJIFilenameParser.parse("") == nil)
-        #expect(DJIFilenameParser.parse("DJI_short.MP4") == nil)
+        #expect(CaptureDeviceFilenameParser.parse("IMG_1234.JPG") == nil)
+        #expect(CaptureDeviceFilenameParser.parse("video.mp4") == nil)
+        #expect(CaptureDeviceFilenameParser.parse("") == nil)
+        #expect(CaptureDeviceFilenameParser.parse("DJI_short.MP4") == nil)
     }
 
     @Test("isDJIFile convenience")
     func isDJIFile() {
-        #expect(DJIFilenameParser.isDJIFile("DJI_20251222073342_0001_D.MP4") == true)
-        #expect(DJIFilenameParser.isDJIFile("IMG_1234.JPG") == false)
+        #expect(CaptureDeviceFilenameParser.isDJIFile("DJI_20251222073342_0001_D.MP4") == true)
+        #expect(CaptureDeviceFilenameParser.isDJIFile("IMG_1234.JPG") == false)
     }
 }

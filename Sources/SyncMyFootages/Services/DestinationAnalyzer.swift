@@ -143,7 +143,7 @@ enum DestinationAnalyzer {
             guard let isFile = try? fileURL.resourceValues(forKeys: [.isRegularFileKey]).isRegularFile,
                   isFile else { continue }
 
-            if DJIFilenameParser.isDJIFile(fileURL.lastPathComponent) {
+            if CaptureDeviceFilenameParser.isDJIFile(fileURL.lastPathComponent) {
                 results.append(fileURL)
             }
         }

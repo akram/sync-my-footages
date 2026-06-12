@@ -53,7 +53,7 @@ enum DeviceIdentifier {
             return nil
         }
         let mp4s = files.filter {
-            $0.pathExtension.uppercased() == "MP4" && DJIFilenameParser.isDJIFile($0.lastPathComponent)
+            $0.pathExtension.uppercased() == "MP4" && CaptureDeviceFilenameParser.isDJIFile($0.lastPathComponent)
         }
         guard let firstMP4 = mp4s.first else { return nil }
         return readDeviceTypeFromMetadata(firstMP4)

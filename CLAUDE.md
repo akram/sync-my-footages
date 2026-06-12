@@ -45,7 +45,7 @@ Sources/SyncMyFootages/
 ├── Models/        — CaptureDevice, FootageFile, SyncJob, JournalEntry, etc.
 ├── Services/      — Core logic (FileOrganizer, RsyncEngine, DeviceIdentifier, etc.)
 ├── Views/         — SwiftUI views (MenuBar, Settings, Sync, Redundancy, etc.)
-└── Utilities/     — DJIFilenameParser, Constants
+└── Utilities/     — CaptureDeviceFilenameParser, Constants
 ```
 
 ## Common Pitfalls

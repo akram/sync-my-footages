@@ -17,7 +17,7 @@ struct FootageFile: Identifiable, Hashable, Sendable {
         clipID
     }
 
-    init(url: URL, parsed: DJIFilenameParser.ParsedFilename?, fileSize: Int64) {
+    init(url: URL, parsed: CaptureDeviceFilenameParser.ParsedFilename?, fileSize: Int64) {
         self.id = url.path
         self.url = url
         self.filename = url.lastPathComponent

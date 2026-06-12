@@ -118,7 +118,7 @@ enum FileOrganizer {
             let progress = 0.8 * Double(index) / Double(max(allFiles.count, 1))
             progressHandler(fileURL.lastPathComponent, progress)
 
-            guard let parsed = DJIFilenameParser.parse(fileURL.lastPathComponent) else {
+            guard let parsed = CaptureDeviceFilenameParser.parse(fileURL.lastPathComponent) else {
                 skipped += 1
                 continue
             }
@@ -319,7 +319,7 @@ enum FileOrganizer {
         var results: [URL] = []
         for case let fileURL as URL in enumerator {
             guard (try? fileURL.resourceValues(forKeys: [.isRegularFileKey]).isRegularFile) == true else { continue }
-            if DJIFilenameParser.isDJIFile(fileURL.lastPathComponent) {
+            if CaptureDeviceFilenameParser.isDJIFile(fileURL.lastPathComponent) {
                 results.append(fileURL)
             }
         }
@@ -345,7 +345,7 @@ enum FileOrganizer {
                 guard resourceValues?.isRegularFile == true else { continue }
 
                 let fileSize = Int64(resourceValues?.fileSize ?? 0)
-                let parsed = DJIFilenameParser.parse(fileURL.lastPathComponent)
+                let parsed = CaptureDeviceFilenameParser.parse(fileURL.lastPathComponent)
 
                 files.append(FootageFile(url: fileURL, parsed: parsed, fileSize: fileSize))
             }

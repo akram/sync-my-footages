@@ -549,7 +549,7 @@ private final class DirectoryListingCache: @unchecked Sendable {
         for case let fileURL as URL in enumerator {
             guard let values = try? fileURL.resourceValues(forKeys: [.isRegularFileKey]),
                   values.isRegularFile == true else { continue }
-            if DJIFilenameParser.isDJIFile(fileURL.lastPathComponent) {
+            if CaptureDeviceFilenameParser.isDJIFile(fileURL.lastPathComponent) {
                 existingFiles.insert(fileURL.path)
             }
         }

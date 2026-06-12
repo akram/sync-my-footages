@@ -1,7 +1,7 @@
 import Foundation
 
 /// Parses DJI filenames like DJI_20251222073342_0001_D.MP4
-enum DJIFilenameParser {
+enum CaptureDeviceFilenameParser {
     struct ParsedFilename: Sendable, Hashable {
         let captureDate: Date
         let sequenceNumber: Int
