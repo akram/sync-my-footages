@@ -2,13 +2,13 @@
 
 ## Overview
 
-Sync My Footages is a macOS menu bar app that automatically detects DJI cameras and SD cards, then syncs your video rushes to external drives with full integrity tracking.
+Sync My Footages is a macOS menu bar app that automatically detects capture devices and SD cards, then syncs your video rushes to external drives with full integrity tracking.
 
 ## Menu Bar Popover
 
 Click the app icon in the menu bar to open the popover:
 
-- **Connected devices** — each detected DJI device with its volume name and storage type
+- **Connected devices** — each detected capture device with its volume name and storage type
 - **Sync button** — click to start syncing, or click the dropdown arrow for options:
   - **Configure sync** — open the full sync configuration window
   - **Saved destinations** — sync to a specific destination
@@ -19,7 +19,7 @@ Click the app icon in the menu bar to open the popover:
 
 ## Sync Flow
 
-1. The app scans the device's DCIM folders for DJI files
+1. The app scans the device's DCIM folders for footage files
 2. Checks each file against the destination (by filename + size)
 3. Files already present in titled folders (e.g. `20251222 - Morocco Trip/videos/`) are recognized and skipped
 4. New files are copied using `FileManager.copyItem` (fastest possible)
@@ -154,7 +154,7 @@ Configure in Settings > Destinations:
 
 ## Device Detection
 
-The app detects DJI devices by:
+The app detects capture devices by:
 
 1. Monitoring volume mounts via DiskArbitration framework
 2. Checking for `DCIM/DJI_xxx/` folder structure
@@ -163,8 +163,8 @@ The app detects DJI devices by:
 
 ## Demo Mode
 
-Access via More > Demo Mode. Creates fake DJI files in `~/.sync-my-footages/demo/` for testing without real hardware. Includes:
-- Simulated device with DJI files across multiple dates
+Access via More > Demo Mode. Creates fake footage files in `~/.sync-my-footages/demo/` for testing without real hardware. Includes:
+- Simulated device with footage files across multiple dates
 - Simulated destination with some pre-existing files
 - A sample PROJECT.md
 

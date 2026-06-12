@@ -1,6 +1,6 @@
 # Sync My Footages
 
-Native macOS menu bar app for syncing DJI video rushes to external drives with SHA256 tracking.
+Native macOS menu bar app for syncing video rushes from capture devices to external drives with SHA256 tracking.
 
 ![Sync in progress](docs/images/sync-progress.png)
 
@@ -56,15 +56,15 @@ bash scripts/package.sh
 
 | Device | Detection | Storage |
 |--------|-----------|---------|
-| DJI Osmo Pocket 3 | Encoder tag in MP4 metadata | Internal + SD Card |
-| DJI Osmo Action 5 Pro | Encoder tag in MP4 metadata | Internal + SD Card |
-| DJI Neo 2 | Encoder tag in MP4 metadata | Internal + SD Card |
-| Any DJI camera | DCIM/DJI_xxx folder structure | SD Card via adapter |
+| Osmo Pocket 3 | Encoder tag in MP4 metadata | Internal + SD Card |
+| Osmo Action 5 Pro | Encoder tag in MP4 metadata | Internal + SD Card |
+| Neo 2 | Encoder tag in MP4 metadata | Internal + SD Card |
+| Any capture device | DCIM/DJI_xxx folder structure | SD Card via adapter |
 
 ## Quick Start
 
 1. **Configure a destination** — Open the menu bar popover, click More > Settings > Destinations, add your external drive
-2. **Connect your DJI device** — Plug in via USB or insert the SD card
+2. **Connect your capture device** — Plug in via USB or insert the SD card
 3. **Click Sync** — Files are copied to `{device}/{date}/{type}/` on your destination
 4. **Add project metadata** — Create a `PROJECT.md` in a date folder:
 

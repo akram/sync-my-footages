@@ -2,7 +2,7 @@
 
 ## Overview
 
-Native macOS menu bar app (SwiftUI) for syncing DJI video rushes to external drives with SHA256 tracking.
+Native macOS menu bar app (SwiftUI) for syncing video rushes from capture devices to external drives with SHA256 tracking.
 
 ## Build & Run
 
@@ -35,7 +35,7 @@ swift test
 - **Reorganize is idempotent** — files in titled folders (e.g. `20251222 - RC Car Vlog/videos/`) are recognized as correctly placed even when the pattern says `20251222/videos/`
 - **DestinationAnalyzer** uses the same date-prefix matching — files in titled folders count as "already synced"
 - **DiskArbitration** for volume detection, with fallback to `/Volumes/` polling
-- **Demo mode** creates fake DJI device + destination in `~/.sync-my-footages/demo/`
+- **Demo mode** creates fake capture device + destination in `~/.sync-my-footages/demo/`
 
 ## File Structure
 
