@@ -1,6 +1,6 @@
 import Foundation
 import Testing
-@testable import RsyncMyFootages
+@testable import SyncMyFootages
 
 @Suite("File Organizer Pattern Expansion")
 struct FileOrganizerTests {
@@ -46,7 +46,7 @@ struct FileOrganizerTests {
             "{device}/{year}{month}{day}/{type}",
             deviceType: .action5Pro, captureDate: date, fileExtension: "WAV"
         )
-        #expect(result == "Action5Pro/20251222/audios")
+        #expect(result == "OsmoAction5Pro/20251222/audios")
     }
 }
 

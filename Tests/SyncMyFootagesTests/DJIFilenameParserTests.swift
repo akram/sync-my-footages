@@ -1,6 +1,6 @@
 import Foundation
 import Testing
-@testable import RsyncMyFootages
+@testable import SyncMyFootages
 
 @Suite("DJI Filename Parser")
 struct DJIFilenameParserTests {

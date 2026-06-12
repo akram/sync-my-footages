@@ -7,7 +7,7 @@ Native macOS menu bar app (SwiftUI) for syncing DJI video rushes to external dri
 ## Build & Run
 
 ```bash
-swift build && .build/debug/RsyncMyFootages
+swift build && .build/debug/SyncMyFootages
 ```
 
 ## Test
@@ -40,8 +40,8 @@ swift test
 ## File Structure
 
 ```
-Sources/RsyncMyFootages/
-├── App/           — RsyncMyFootagesApp, AppState, WindowManager
+Sources/SyncMyFootages/
+├── App/           — SyncMyFootagesApp, AppState, WindowManager
 ├── Models/        — DJIDevice, FootageFile, SyncJob, JournalEntry, etc.
 ├── Services/      — Core logic (FileOrganizer, RsyncEngine, DeviceIdentifier, etc.)
 ├── Views/         — SwiftUI views (MenuBar, Settings, Sync, Redundancy, etc.)

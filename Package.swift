@@ -2,21 +2,21 @@
 import PackageDescription
 
 let package = Package(
-    name: "RsyncMyFootages",
+    name: "SyncMyFootages",
     platforms: [.macOS(.v15)],
     targets: [
         .executableTarget(
-            name: "RsyncMyFootages",
-            path: "Sources/RsyncMyFootages",
+            name: "SyncMyFootages",
+            path: "Sources/SyncMyFootages",
             linkerSettings: [
                 .linkedFramework("DiskArbitration"),
                 .linkedFramework("AVFoundation"),
             ]
         ),
         .testTarget(
-            name: "RsyncMyFootagesTests",
-            dependencies: ["RsyncMyFootages"],
-            path: "Tests/RsyncMyFootagesTests"
+            name: "SyncMyFootagesTests",
+            dependencies: ["SyncMyFootages"],
+            path: "Tests/SyncMyFootagesTests"
         ),
     ]
 )

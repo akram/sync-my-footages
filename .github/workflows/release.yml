@@ -30,7 +30,7 @@ jobs:
           mkdir -p "${APP_DIR}/Contents/MacOS"
           mkdir -p "${APP_DIR}/Contents/Resources"
 
-          cp .build/release/RsyncMyFootages "${APP_DIR}/Contents/MacOS/"
+          cp .build/release/SyncMyFootages "${APP_DIR}/Contents/MacOS/"
 
           cat > "${APP_DIR}/Contents/Info.plist" << PLIST
           <?xml version="1.0" encoding="UTF-8"?>
@@ -48,7 +48,7 @@ jobs:
               <key>CFBundleShortVersionString</key>
               <string>${VERSION}</string>
               <key>CFBundleExecutable</key>
-              <string>RsyncMyFootages</string>
+              <string>SyncMyFootages</string>
               <key>CFBundlePackageType</key>
               <string>APPL</string>
               <key>CFBundleInfoDictionaryVersion</key>

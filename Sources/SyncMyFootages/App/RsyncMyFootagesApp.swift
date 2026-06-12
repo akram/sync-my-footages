@@ -1,7 +1,7 @@
 import SwiftUI
 
 @main
-struct RsyncMyFootagesApp: App {
+struct SyncMyFootagesApp: App {
     @State private var appState = AppState()
 
     var body: some Scene {

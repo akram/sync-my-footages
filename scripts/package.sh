@@ -17,7 +17,7 @@ mkdir -p "${APP_DIR}/Contents/MacOS"
 mkdir -p "${APP_DIR}/Contents/Resources"
 
 # Copy executable
-cp "${BUILD_DIR}/RsyncMyFootages" "${APP_DIR}/Contents/MacOS/"
+cp "${BUILD_DIR}/SyncMyFootages" "${APP_DIR}/Contents/MacOS/"
 
 # Create Info.plist
 cat > "${APP_DIR}/Contents/Info.plist" << PLIST
@@ -36,7 +36,7 @@ cat > "${APP_DIR}/Contents/Info.plist" << PLIST
     <key>CFBundleShortVersionString</key>
     <string>${VERSION}</string>
     <key>CFBundleExecutable</key>
-    <string>RsyncMyFootages</string>
+    <string>SyncMyFootages</string>
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleInfoDictionaryVersion</key>
