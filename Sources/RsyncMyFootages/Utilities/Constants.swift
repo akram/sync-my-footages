@@ -2,7 +2,7 @@ import Foundation
 
 enum Constants {
     /// App identifier
-    static let appIdentifier = "com.akram.rsync-my-footages"
+    static let appIdentifier = "com.akram.sync-my-footages"
 
     /// Journal filename written to each volume
     static let decentralizedJournalFilename = ".rsync-footages.journal"
@@ -10,7 +10,7 @@ enum Constants {
     /// Central journal directory
     static let centralJournalDirectory: URL = {
         let home = FileManager.default.homeDirectoryForCurrentUser
-        return home.appendingPathComponent(".rsync-my-footages", isDirectory: true)
+        return home.appendingPathComponent(".sync-my-footages", isDirectory: true)
     }()
 
     /// Central journal database filename

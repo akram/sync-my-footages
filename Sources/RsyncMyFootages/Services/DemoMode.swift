@@ -3,7 +3,7 @@ import Foundation
 /// Creates mock DJI device and destination for testing without real hardware
 enum DemoMode {
     static let basePath = FileManager.default.homeDirectoryForCurrentUser
-        .appendingPathComponent(".rsync-my-footages/demo")
+        .appendingPathComponent(".sync-my-footages/demo")
 
     static var devicePath: URL { basePath.appendingPathComponent("device") }
     static var destinationPath: URL { basePath.appendingPathComponent("destination") }

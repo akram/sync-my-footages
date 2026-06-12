@@ -9,7 +9,7 @@ struct RsyncMyFootagesApp: App {
             MenuBarPopoverView()
                 .environment(appState)
         } label: {
-            Label("RSync My Footages", systemImage: appState.menuBarIconName)
+            Label("Sync My Footages", systemImage: appState.menuBarIconName)
         }
         .menuBarExtraStyle(.window)
     }

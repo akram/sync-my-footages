@@ -1,12 +1,12 @@
 #!/bin/bash
 set -e
 
-APP_NAME="RSync My Footages"
-BUNDLE_ID="com.akram.rsync-my-footages"
+APP_NAME="Sync My Footages"
+BUNDLE_ID="com.akram.sync-my-footages"
 VERSION="1.0.0"
 BUILD_DIR=".build/release"
 APP_DIR="dist/${APP_NAME}.app"
-DMG_NAME="RSync-My-Footages-${VERSION}.dmg"
+DMG_NAME="Sync-My-Footages-${VERSION}.dmg"
 
 echo "=== Building release ==="
 swift build -c release
@@ -48,7 +48,7 @@ cat > "${APP_DIR}/Contents/Info.plist" << PLIST
     <key>NSHighResolutionCapable</key>
     <true/>
     <key>NSAppleEventsUsageDescription</key>
-    <string>RSync My Footages needs to refresh Finder after syncing files.</string>
+    <string>Sync My Footages needs to refresh Finder after syncing files.</string>
 </dict>
 </plist>
 PLIST

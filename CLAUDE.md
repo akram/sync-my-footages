@@ -1,4 +1,4 @@
-# RSync My Footages
+# Sync My Footages
 
 ## Overview
 
@@ -35,7 +35,7 @@ swift test
 - **Reorganize is idempotent** — files in titled folders (e.g. `20251222 - RC Car Vlog/videos/`) are recognized as correctly placed even when the pattern says `20251222/videos/`
 - **DestinationAnalyzer** uses the same date-prefix matching — files in titled folders count as "already synced"
 - **DiskArbitration** for volume detection, with fallback to `/Volumes/` polling
-- **Demo mode** creates fake DJI device + destination in `~/.rsync-my-footages/demo/`
+- **Demo mode** creates fake DJI device + destination in `~/.sync-my-footages/demo/`
 
 ## File Structure
 

@@ -7,7 +7,7 @@ struct MenuBarPopoverView: View {
         VStack(alignment: .leading, spacing: 12) {
             // Header
             HStack {
-                Text("RSync My Footages")
+                Text("Sync My Footages")
                     .font(.headline)
                 Spacer()
                 Button {

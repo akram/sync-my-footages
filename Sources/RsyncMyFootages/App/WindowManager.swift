@@ -108,7 +108,7 @@ final class WindowManager {
 
         let window = createWindow(
             id: windowID,
-            title: "RSync My Footages — Settings",
+            title: "Sync My Footages — Settings",
             content: view,
             width: 620,
             height: 520,

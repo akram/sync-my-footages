@@ -7,7 +7,7 @@ final class DiskWatcher: @unchecked Sendable {
     private let onAppear: @Sendable (URL) async -> Void
     private let onDisappear: @Sendable (URL) async -> Void
     private var session: DASession?
-    private let queue = DispatchQueue(label: "com.rsync-my-footages.disk-watcher")
+    private let queue = DispatchQueue(label: "com.sync-my-footages.disk-watcher")
     private var fallbackSource: DispatchSourceFileSystemObject?
     private var knownVolumes: Set<String> = []
 
