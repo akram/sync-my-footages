@@ -34,7 +34,7 @@ struct ThumbnailGridView: View {
 
             let url = URL(fileURLWithPath: entry.currentPath)
             let sha = item.sha256
-            Task {
+            Task { @MainActor in
                 if let img = await ThumbnailGenerator.generateThumbnail(for: url) {
                     thumbnails[sha] = img
                 }

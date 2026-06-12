@@ -78,7 +78,7 @@ struct FileDetailView: View {
                             }
 
                             Button("Verify") {
-                                Task {
+                                Task { @MainActor in
                                     let result = await VerificationService.verify(
                                         path: entry.currentPath,
                                         expectedSize: entry.fileSize,

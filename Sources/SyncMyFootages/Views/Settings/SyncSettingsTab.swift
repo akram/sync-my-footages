@@ -120,9 +120,6 @@ struct SyncSettingsTab: View {
             // to avoid mixing files from different devices
             if pattern.contains("{device}") {
                 let fm = FileManager.default
-                let knownDeviceNames = CaptureDeviceType.allCases.map {
-                    $0.rawValue.replacingOccurrences(of: " ", with: "")
-                }
 
                 if let contents = try? fm.contentsOfDirectory(atPath: directory.path) {
                     for name in contents {
