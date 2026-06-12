@@ -1,9 +1,9 @@
 import Foundation
 import AVFoundation
 
-/// Identifies DJI devices from mounted volume paths
+/// Identifies capture devices from mounted volume paths
 enum DeviceIdentifier {
-    /// Check if a mounted volume is a DJI footage source (not a sync destination)
+    /// Check if a mounted volume is a footage source (not a sync destination)
     static func identify(volumePath: URL) -> DJIDevice? {
         let fm = FileManager.default
 
@@ -45,7 +45,7 @@ enum DeviceIdentifier {
         )
     }
 
-    /// Also detect DJI footage in non-DCIM folders (e.g. already-copied files)
+    /// Also detect footage in non-DCIM folders (e.g. already-copied files)
     /// Returns nil if this doesn't look like a DJI source
     static func identifyFromVideoFiles(in folderURL: URL) -> DJIDeviceType? {
         let fm = FileManager.default
@@ -222,7 +222,7 @@ enum DeviceIdentifier {
         return info
     }
 
-    /// Scan all currently mounted volumes for DJI devices
+    /// Scan all currently mounted volumes for capture devices
     static func scanMountedVolumes() -> [DJIDevice] {
         let fm = FileManager.default
         guard let volumes = fm.mountedVolumeURLs(

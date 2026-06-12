@@ -26,7 +26,7 @@ struct MenuBarPopoverView: View {
                 HStack {
                     Image(systemName: "cable.connector")
                         .foregroundStyle(.secondary)
-                    Text("No DJI devices connected")
+                    Text("No capture devices connected")
                         .foregroundStyle(.secondary)
                 }
                 .padding(.vertical, 8)

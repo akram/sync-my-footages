@@ -6,7 +6,7 @@ Native macOS menu bar app for syncing DJI video rushes to external drives with S
 
 ## Features
 
-- **Auto-detect DJI devices** — Osmo Pocket 3, Osmo Action 5 Pro, Neo 2 via USB or SD card adapter
+- **Auto-detect capture devices** — Osmo Pocket 3, Osmo Action 5 Pro, Neo 2 via USB or SD card adapter
 - **One-click sync** — click Sync to copy new files to your configured destinations
 - **Smart skip** — only copies files that don't already exist on the destination (by size comparison)
 - **SHA256 journal** — tracks every synced file with checksums for integrity verification

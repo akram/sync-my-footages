@@ -8,111 +8,115 @@ struct FileTypeMappingTab: View {
     @State private var hasChanges = false
 
     var body: some View {
-        Form {
-            Section("Type Mapping") {
-                Text("Maps file extensions to folder names for the {type} token.")
-                    .font(.caption)
+        VStack(spacing: 0) {
+            Form {
+                Section {
+                    Text("When using `{type}` in the pattern, files are sorted into folders by extension.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+
+                    // Table header
+                    HStack {
+                        Text("Folder Name")
+                            .frame(width: 100, alignment: .leading)
+                        Text("Extensions")
+                        Spacer()
+                    }
+                    .font(.caption.bold())
                     .foregroundStyle(.secondary)
+                    .padding(.top, 4)
 
-                ForEach(Array(mapping.categories.enumerated()), id: \.element.id) { index, category in
-                    categoryRow(index: index, category: category)
-                    if index < mapping.categories.count - 1 {
-                        Divider()
+                    // Rows
+                    ForEach(Array(mapping.categories.enumerated()), id: \.element.id) { index, category in
+                        HStack(alignment: .center, spacing: 8) {
+                            // Folder name
+                            LeftAlignedTextField(
+                                text: Binding(
+                                    get: { mapping.categories[index].folderName },
+                                    set: { mapping.categories[index].folderName = $0 }
+                                ),
+                                onCommit: { hasChanges = true }
+                            )
+                            .frame(width: 100, height: 22)
+
+                            // Extensions
+                            FlowLayout(spacing: 4) {
+                                ForEach(category.extensions, id: \.self) { ext in
+                                    extensionBadge(ext, categoryIndex: index)
+                                }
+                                addExtensionButton(categoryIndex: index)
+                            }
+
+                            Spacer()
+
+                            Button {
+                                mapping.categories.remove(at: index)
+                                hasChanges = true
+                            } label: {
+                                Image(systemName: "minus.circle.fill")
+                                    .foregroundStyle(.red)
+                            }
+                            .buttonStyle(.borderless)
+                        }
                     }
+
+                    // Add row
+                    HStack(spacing: 8) {
+                        LeftAlignedTextField(
+                            text: $newCategoryName,
+                            onCommit: { addCategory() }
+                        )
+                        .frame(width: 100, height: 22)
+
+                        Button {
+                            addCategory()
+                        } label: {
+                            Image(systemName: "plus.circle.fill")
+                                .foregroundStyle(.green)
+                        }
+                        .buttonStyle(.borderless)
+                        .disabled(newCategoryName.isEmpty || mapping.categories.contains { $0.folderName == newCategoryName })
+
+                        Spacer()
+                    }
+                } header: {
+                    Text("Type Mapping")
                 }
 
-                // Add new category
-                HStack {
-                    Image(systemName: "plus.circle")
-                        .foregroundStyle(.green)
-                    TextField("New type name...", text: $newCategoryName)
-                        .textFieldStyle(.roundedBorder)
-                        .frame(width: 140)
-                    Button("Add") {
-                        addCategory()
+                Section("Unknown Extensions") {
+                    Picker("Fallback folder", selection: $mapping.fallbackFolder) {
+                        Text("others").tag("others")
+                        ForEach(mapping.categories) { cat in
+                            Text(cat.folderName).tag(cat.folderName)
+                        }
                     }
-                    .disabled(newCategoryName.isEmpty || mapping.categories.contains { $0.folderName == newCategoryName })
+                    .onChange(of: mapping.fallbackFolder) { hasChanges = true }
                 }
-            }
 
-            Section("Unknown Extensions") {
-                Picker("Fallback folder", selection: $mapping.fallbackFolder) {
-                    Text("others").tag("others")
-                    ForEach(mapping.categories) { cat in
-                        Text(cat.folderName).tag(cat.folderName)
-                    }
-                }
-                .onChange(of: mapping.fallbackFolder) { hasChanges = true }
-            }
-
-            Section {
-                HStack {
-                    Button("Reset to defaults") {
-                        mapping = .defaultMapping
-                        mapping.save()
-                        hasChanges = false
-                    }
-                    .foregroundStyle(.red)
-
-                    Spacer()
-
-                    if hasChanges {
-                        Button("Save") {
+                Section {
+                    HStack {
+                        Button("Reset to defaults") {
+                            mapping = .defaultMapping
                             mapping.save()
                             hasChanges = false
                         }
-                        .buttonStyle(.borderedProminent)
-                    } else {
-                        Text("Saved")
-                            .font(.caption)
-                            .foregroundStyle(.green)
-                    }
-                }
-            }
-        }
-        .formStyle(.grouped)
-    }
-
-    private func categoryRow(index: Int, category: FileTypeMapping.Category) -> some View {
-        VStack(alignment: .leading, spacing: 8) {
-            // Top row: icon + folder name field + delete
-            HStack(spacing: 8) {
-                Image(systemName: "folder.fill")
-                    .foregroundStyle(.blue)
-                    .frame(width: 16)
-
-                TextField("folder", text: Binding(
-                    get: { mapping.categories[index].folderName },
-                    set: {
-                        mapping.categories[index].folderName = $0
-                        hasChanges = true
-                    }
-                ))
-                .textFieldStyle(.roundedBorder)
-                .frame(width: 120)
-                .font(.body.monospaced())
-
-                // Extensions inline
-                FlowLayout(spacing: 4) {
-                    ForEach(category.extensions, id: \.self) { ext in
-                        extensionBadge(ext, categoryIndex: index)
-                    }
-
-                    addExtensionButton(categoryIndex: index)
-                }
-
-                Spacer()
-
-                Button {
-                    mapping.categories.remove(at: index)
-                    hasChanges = true
-                } label: {
-                    Image(systemName: "trash")
-                        .font(.caption)
                         .foregroundStyle(.red)
+                        Spacer()
+                        if hasChanges {
+                            Button("Save") {
+                                mapping.save()
+                                hasChanges = false
+                            }
+                            .buttonStyle(.borderedProminent)
+                        } else {
+                            Text("Saved")
+                                .font(.caption)
+                                .foregroundStyle(.green)
+                        }
+                    }
                 }
-                .buttonStyle(.borderless)
             }
+            .formStyle(.grouped)
         }
     }
 
@@ -121,7 +125,8 @@ struct FileTypeMappingTab: View {
             Text(ext)
                 .font(.caption.monospaced().bold())
             Button {
-                removeExtension(ext, fromCategoryAt: categoryIndex)
+                mapping.categories[categoryIndex].extensions.removeAll { $0 == ext }
+                hasChanges = true
             } label: {
                 Image(systemName: "xmark")
                     .font(.system(size: 7, weight: .bold))
@@ -130,7 +135,7 @@ struct FileTypeMappingTab: View {
             .buttonStyle(.borderless)
         }
         .padding(.horizontal, 8)
-        .padding(.vertical, 3)
+        .frame(height: 26)
         .background(.secondary.opacity(0.12), in: RoundedRectangle(cornerRadius: 5))
     }
 
@@ -147,7 +152,6 @@ struct FileTypeMappingTab: View {
                     addExtension(toCategoryAt: categoryIndex)
                 } label: {
                     Image(systemName: "checkmark.circle.fill")
-                        .font(.caption)
                         .foregroundStyle(.green)
                 }
                 .buttonStyle(.borderless)
@@ -156,7 +160,6 @@ struct FileTypeMappingTab: View {
                     newExtension = ""
                 } label: {
                     Image(systemName: "xmark.circle.fill")
-                        .font(.caption)
                         .foregroundStyle(.secondary)
                 }
                 .buttonStyle(.borderless)
@@ -167,26 +170,18 @@ struct FileTypeMappingTab: View {
                 newExtension = ""
             } label: {
                 Image(systemName: "plus.circle")
-                    .font(.caption)
                     .foregroundStyle(.blue)
             }
             .buttonStyle(.borderless)
-            .help("Add extension")
+            .frame(height: 26)
         }
     }
-
-    // MARK: - Actions
 
     private func addCategory() {
         let name = newCategoryName.trimmingCharacters(in: .whitespaces).lowercased()
         guard !name.isEmpty else { return }
         mapping.categories.append(FileTypeMapping.Category(folderName: name, extensions: []))
         newCategoryName = ""
-        hasChanges = true
-    }
-
-    private func removeExtension(_ ext: String, fromCategoryAt index: Int) {
-        mapping.categories[index].extensions.removeAll { $0 == ext }
         hasChanges = true
     }
 
@@ -203,7 +198,50 @@ struct FileTypeMappingTab: View {
     }
 }
 
-/// Simple flow layout for extension badges
+/// NSTextField wrapper that properly left-aligns text
+struct LeftAlignedTextField: NSViewRepresentable {
+    @Binding var text: String
+    var onCommit: () -> Void = {}
+
+    func makeNSView(context: Context) -> NSTextField {
+        let tf = NSTextField()
+        tf.isBordered = true
+        tf.isBezeled = true
+        tf.bezelStyle = .roundedBezel
+        tf.alignment = .left
+        tf.font = NSFont.monospacedSystemFont(ofSize: 12, weight: .regular)
+        tf.delegate = context.coordinator
+        tf.lineBreakMode = .byTruncatingTail
+        tf.usesSingleLineMode = true
+        tf.cell?.truncatesLastVisibleLine = true
+        return tf
+    }
+
+    func updateNSView(_ nsView: NSTextField, context: Context) {
+        if nsView.stringValue != text {
+            nsView.stringValue = text
+        }
+    }
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(self)
+    }
+
+    class Coordinator: NSObject, NSTextFieldDelegate {
+        let parent: LeftAlignedTextField
+        init(_ parent: LeftAlignedTextField) { self.parent = parent }
+
+        func controlTextDidChange(_ obj: Notification) {
+            guard let tf = obj.object as? NSTextField else { return }
+            parent.text = tf.stringValue
+        }
+
+        func controlTextDidEndEditing(_ obj: Notification) {
+            parent.onCommit()
+        }
+    }
+}
+
 struct FlowLayout: Layout {
     var spacing: CGFloat
 

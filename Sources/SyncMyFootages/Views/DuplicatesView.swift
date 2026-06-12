@@ -54,7 +54,7 @@ struct DuplicatesView: View {
                 ContentUnavailableView(
                     "Select a folder to scan",
                     systemImage: "magnifyingglass",
-                    description: Text("The scanner will find duplicate DJI files by SHA256 hash")
+                    description: Text("The scanner will find duplicate footage files by SHA256 hash")
                 )
                 Spacer()
             }

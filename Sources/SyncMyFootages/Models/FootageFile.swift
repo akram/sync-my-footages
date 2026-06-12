@@ -1,6 +1,6 @@
 import Foundation
 
-/// A single footage file on a DJI device
+/// A single footage file on a capture device
 struct FootageFile: Identifiable, Hashable, Sendable {
     let id: String
     let url: URL

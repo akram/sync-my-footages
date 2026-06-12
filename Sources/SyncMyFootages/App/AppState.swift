@@ -11,13 +11,15 @@ final class AppState {
     var activeSyncJobs: [SyncJob] = []
 
     // MARK: - Device profiles (persisted via UserDefaults)
-    var deviceProfiles: [DeviceProfile] = [] {
-        didSet { Self.save(deviceProfiles, forKey: "deviceProfiles") }
-    }
+    var deviceProfiles: [DeviceProfile] = []
 
     // MARK: - Destination disks
-    var destinationDisks: [DestinationDisk] = [] {
-        didSet { Self.save(destinationDisks, forKey: "destinationDisks") }
+    var destinationDisks: [DestinationDisk] = []
+
+    /// Save current state to UserDefaults (call after modifications)
+    func saveSettings() {
+        Self.save(deviceProfiles, forKey: "deviceProfiles")
+        Self.save(destinationDisks, forKey: "destinationDisks")
     }
 
     // MARK: - UI state
@@ -87,6 +89,7 @@ final class AppState {
         if DemoMode.isActive {
             connectedDevices.removeAll { $0.volumePath == DemoMode.devicePath }
             destinationDisks.removeAll { $0.path == DemoMode.destinationPath.path }
+            saveSettings()
             DemoMode.teardown()
         } else {
             try? DemoMode.setup()
@@ -104,6 +107,7 @@ final class AppState {
                     diskIdentifier: "demo-dest"
                 ))
             }
+            saveSettings()
         }
     }
 
@@ -524,7 +528,7 @@ final class AppState {
 /// Caches directory listings and file existence checks to avoid repeated I/O during sync
 private final class DirectoryListingCache: @unchecked Sendable {
     private let root: URL
-    private var existingFiles: Set<String> = []  // all DJI file paths on destination
+    private var existingFiles: Set<String> = []  // all footage file paths on destination
     private var dateFolderMap: [String: String] = [:]  // datePrefix → actual folder name
 
     init(root: URL) {
@@ -535,7 +539,7 @@ private final class DirectoryListingCache: @unchecked Sendable {
     private func buildIndex() {
         let fm = FileManager.default
 
-        // Walk the entire destination tree once and index all DJI files
+        // Walk the entire destination tree once and index all footage files
         guard let enumerator = fm.enumerator(
             at: root,
             includingPropertiesForKeys: [.isRegularFileKey, .fileSizeKey],

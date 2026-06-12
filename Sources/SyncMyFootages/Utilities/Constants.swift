@@ -16,7 +16,7 @@ enum Constants {
     /// Central journal database filename
     static let centralJournalFilename = "journal.db"
 
-    /// DJI folder patterns
+    /// Device folder patterns
     static let dcimFolderName = "DCIM"
     static let djiFolderPrefix = "DJI_"
 

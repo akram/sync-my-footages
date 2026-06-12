@@ -5,9 +5,15 @@ import Foundation
 struct FileTypeMapping: Codable, Sendable {
     /// A single type category with its folder name and associated extensions
     struct Category: Codable, Identifiable, Hashable, Sendable {
-        var id: String { folderName }
+        var id: UUID
         var folderName: String
         var extensions: [String]  // uppercase, e.g. ["MP4", "MOV"]
+
+        init(folderName: String, extensions: [String]) {
+            self.id = UUID()
+            self.folderName = folderName
+            self.extensions = extensions
+        }
     }
 
     var categories: [Category]

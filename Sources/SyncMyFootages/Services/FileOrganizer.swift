@@ -104,7 +104,7 @@ enum FileOrganizer {
             effectivePattern = String(effectivePattern.dropFirst("{device}/".count))
         }
 
-        // Step 1: Move DJI files according to pattern
+        // Step 1: Move footage files according to pattern
         // Files go into plain date folders based on the pattern (e.g. 20251222/videos/)
         // If a folder is already titled (e.g. "20251222 - RC Car Vlog"), files inside it
         // are already in the right place — the path comparison will skip them.
@@ -326,7 +326,7 @@ enum FileOrganizer {
         return results
     }
 
-    /// Scan a DJI device for all footage files
+    /// Scan a capture device for all footage files
     static func scanDevice(_ device: DJIDevice) throws -> [FootageFile] {
         let fm = FileManager.default
         var files: [FootageFile] = []

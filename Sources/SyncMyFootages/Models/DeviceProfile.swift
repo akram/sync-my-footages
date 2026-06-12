@@ -1,6 +1,6 @@
 import Foundation
 
-/// User-configured profile for a DJI device type
+/// User-configured profile for a capture device type
 struct DeviceProfile: Identifiable, Codable, Hashable, Sendable {
     var id: String { deviceType.rawValue }
     let deviceType: DJIDeviceType

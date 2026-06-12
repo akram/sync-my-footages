@@ -1,6 +1,6 @@
 import Foundation
 
-/// Scans a directory for duplicate DJI files using size + SHA256
+/// Scans a directory for duplicate footage files using size + SHA256
 enum DuplicateScanner {
     struct DuplicateGroup: Identifiable, Sendable {
         let id: String  // SHA256
@@ -20,19 +20,19 @@ enum DuplicateScanner {
         let totalWastedBytes: Int64
     }
 
-    /// Scan a directory for duplicate DJI files
+    /// Scan a directory for duplicate footage files
     /// Step 1: Group by filename+size (fast)
     /// Step 2: Hash only the groups with multiple matches (slow, but targeted)
     static func scan(
         directory: URL,
         progressHandler: @escaping @Sendable (String, Double) -> Void
     ) async -> ScanResult {
-        // Step 1: Find all DJI files
-        progressHandler("Scanning for DJI files...", 0)
+        // Step 1: Find all footage files
+        progressHandler("Scanning for footage files...", 0)
         let allFiles = findAllDJIFiles(in: directory)
 
         let totalFiles = allFiles.count
-        progressHandler("Found \(totalFiles) DJI files, grouping by size...", 0.1)
+        progressHandler("Found \(totalFiles) footage files, grouping by size...", 0.1)
 
         // Step 2: Group by filename + size (potential duplicates)
         struct SizeKey: Hashable {

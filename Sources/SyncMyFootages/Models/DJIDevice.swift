@@ -5,7 +5,7 @@ enum DJIDeviceType: String, Codable, CaseIterable, Sendable {
     case osmoPocket3 = "Osmo Pocket 3"
     case action5Pro = "Osmo Action 5 Pro"
     case neo2 = "Neo 2"
-    case unknown = "Unknown DJI Device"
+    case unknown = "Unknown Device"
 
     var iconName: String {
         switch self {

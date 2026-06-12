@@ -1,6 +1,6 @@
 import Foundation
 
-/// Analyzes a destination to find existing DJI files and compare with source
+/// Analyzes a destination to find existing footage files and compare with source
 enum DestinationAnalyzer {
     /// Result of analyzing one source file against a destination
     enum FileStatus: Sendable {
@@ -23,7 +23,7 @@ enum DestinationAnalyzer {
         var newBytes: Int64 { newFiles.reduce(0) { $0 + $1.file.fileSize } }
     }
 
-    /// Scan a destination for existing DJI files and build a SHA256 → path index
+    /// Scan a destination for existing footage files and build a SHA256 → path index
     /// Uses file size as a fast pre-filter before hashing
     static func analyze(
         sourceFiles: [FootageFile],
@@ -127,7 +127,7 @@ enum DestinationAnalyzer {
         return true
     }
 
-    /// Recursively find all DJI-named files on a volume
+    /// Recursively find all footage files on a volume
     private static func findDJIFiles(in directory: URL) -> [URL] {
         let fm = FileManager.default
         guard let enumerator = fm.enumerator(

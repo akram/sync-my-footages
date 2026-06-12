@@ -5,11 +5,15 @@ struct DestinationsTab: View {
     @State private var showFilePicker = false
 
     var body: some View {
-        @Bindable var state = appState
-
         Form {
             Section("Destination Disks") {
-                ForEach($state.destinationDisks) { $disk in
+                if appState.destinationDisks.isEmpty {
+                    Text("No destinations configured. Add a folder to start syncing.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+
+                ForEach(appState.destinationDisks) { disk in
                     HStack {
                         Image(systemName: disk.isAvailable ? "externaldrive.fill" : "externaldrive.badge.xmark")
                             .foregroundStyle(disk.isAvailable ? .green : .red)
@@ -34,13 +38,27 @@ struct DestinationsTab: View {
                         .help("Open in Finder")
                         .disabled(!disk.isAvailable)
 
-                        Toggle("Backup", isOn: $disk.isBackup)
-                            .toggleStyle(.switch)
-                            .controlSize(.small)
+                        Button {
+                            toggleBackup(disk)
+                        } label: {
+                            Text(disk.isBackup ? "Backup" : "Primary")
+                                .font(.caption2)
+                                .padding(.horizontal, 6)
+                                .padding(.vertical, 2)
+                                .background(disk.isBackup ? .blue.opacity(0.2) : .secondary.opacity(0.1), in: RoundedRectangle(cornerRadius: 4))
+                        }
+                        .buttonStyle(.borderless)
+                        .help("Toggle backup status")
+
+                        Button {
+                            removeDisk(disk)
+                        } label: {
+                            Image(systemName: "trash")
+                                .foregroundStyle(.red)
+                        }
+                        .buttonStyle(.borderless)
+                        .help("Remove destination")
                     }
-                }
-                .onDelete { indexSet in
-                    appState.destinationDisks.remove(atOffsets: indexSet)
                 }
 
                 Button("Add Destination...") {
@@ -57,13 +75,26 @@ struct DestinationsTab: View {
         .formStyle(.grouped)
         .fileImporter(isPresented: $showFilePicker, allowedContentTypes: [.folder]) { result in
             if case .success(let url) = result {
+                guard !appState.destinationDisks.contains(where: { $0.path == url.path }) else { return }
                 let disk = DestinationDisk(
                     name: url.lastPathComponent,
                     path: url.path,
                     diskIdentifier: url.lastPathComponent
                 )
                 appState.destinationDisks.append(disk)
+                appState.saveSettings()
             }
         }
+    }
+
+    private func toggleBackup(_ disk: DestinationDisk) {
+        guard let index = appState.destinationDisks.firstIndex(where: { $0.id == disk.id }) else { return }
+        appState.destinationDisks[index].isBackup.toggle()
+        appState.saveSettings()
+    }
+
+    private func removeDisk(_ disk: DestinationDisk) {
+        appState.destinationDisks.removeAll { $0.id == disk.id }
+        appState.saveSettings()
     }
 }

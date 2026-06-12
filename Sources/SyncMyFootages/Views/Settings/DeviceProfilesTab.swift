@@ -4,17 +4,24 @@ struct DeviceProfilesTab: View {
     @Environment(AppState.self) private var appState
 
     var body: some View {
-        @Bindable var state = appState
-
         Form {
             Section("Device Profiles") {
-                ForEach($state.deviceProfiles) { $profile in
+                ForEach(appState.deviceProfiles) { profile in
                     HStack {
                         Image(systemName: profile.deviceType.iconName)
                             .frame(width: 24)
                         Text(profile.deviceType.rawValue)
-                            .frame(width: 120, alignment: .leading)
-                        Picker("Behavior", selection: $profile.syncBehavior) {
+                            .frame(width: 160, alignment: .leading)
+
+                        Picker("", selection: Binding(
+                            get: { profile.syncBehavior },
+                            set: { newValue in
+                                if let index = appState.deviceProfiles.firstIndex(where: { $0.id == profile.id }) {
+                                    appState.deviceProfiles[index].syncBehavior = newValue
+                                    appState.saveSettings()
+                                }
+                            }
+                        )) {
                             ForEach(DeviceProfile.SyncBehavior.allCases, id: \.self) { behavior in
                                 Text(behavior.rawValue).tag(behavior)
                             }
@@ -34,6 +41,7 @@ struct DeviceProfilesTab: View {
         .onAppear {
             if appState.deviceProfiles.isEmpty {
                 appState.deviceProfiles = DeviceProfile.defaults
+                appState.saveSettings()
             }
         }
     }

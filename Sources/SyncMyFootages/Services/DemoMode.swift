@@ -1,6 +1,6 @@
 import Foundation
 
-/// Creates mock DJI device and destination for testing without real hardware
+/// Creates mock capture device and destination for testing without real hardware
 enum DemoMode {
     static let basePath = FileManager.default.homeDirectoryForCurrentUser
         .appendingPathComponent(".sync-my-footages/demo")
@@ -8,7 +8,7 @@ enum DemoMode {
     static var devicePath: URL { basePath.appendingPathComponent("device") }
     static var destinationPath: URL { basePath.appendingPathComponent("destination") }
 
-    /// Set up a fake DJI device with sample files and a fake destination
+    /// Set up a fake capture device with sample files and a fake destination
     static func setup() throws {
         let fm = FileManager.default
         try fm.createDirectory(at: devicePath, withIntermediateDirectories: true)
@@ -20,7 +20,7 @@ enum DemoMode {
             .appendingPathComponent("DJI_001")
         try fm.createDirectory(at: dcimDir, withIntermediateDirectories: true)
 
-        // Generate sample DJI files across a few dates
+        // Generate sample footage files across a few dates
         let sessions: [(date: String, count: Int)] = [
             ("20251206", 4),  // Dec 6 — will match RC Car Vlog if PROJECT.md exists
             ("20251222", 6),  // Dec 22
