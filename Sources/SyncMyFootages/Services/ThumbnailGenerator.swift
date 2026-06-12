@@ -3,9 +3,10 @@ import AVFoundation
 import AppKit
 
 /// Generates thumbnails from video files using AVFoundation
+@MainActor
 enum ThumbnailGenerator {
     /// Generate a thumbnail for a video file at the given time (default: 1 second in)
-    @MainActor static func generateThumbnail(
+    static func generateThumbnail(
         for videoURL: URL,
         atTime time: CMTime = CMTime(seconds: 1, preferredTimescale: 600),
         maxDimension: CGFloat = Constants.thumbnailMaxDimension
