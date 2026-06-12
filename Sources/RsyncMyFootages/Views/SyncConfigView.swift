@@ -6,7 +6,9 @@ struct SyncConfigView: View {
 
     let device: DJIDevice
 
-    @State private var selectedDestinations: Set<String> = []
+    @State private var selectedDestinations: Set<String> = [] {
+        didSet { saveSelectedDestinations() }
+    }
     @State private var customDestinations: [CustomDestination] = []
     @State private var verificationLevel: Int = 2
     @State private var autoHash = true
@@ -73,7 +75,10 @@ struct SyncConfigView: View {
             footer
         }
         .frame(width: 560, height: 620)
-        .onAppear { scanDevice() }
+        .onAppear {
+            loadSelectedDestinations()
+            scanDevice()
+        }
         .fileImporter(isPresented: $showAddFolder, allowedContentTypes: [.folder]) { result in
             if case .success(let url) = result {
                 let dest = CustomDestination(name: url.lastPathComponent, path: url.path)
@@ -523,5 +528,22 @@ struct SyncConfigView: View {
             }
         }
         NSApp.keyWindow?.close()
+    }
+
+    // MARK: - Destination persistence per device
+
+    private var destinationsKey: String {
+        "syncDestinations_\(device.deviceType.rawValue)"
+    }
+
+    private func saveSelectedDestinations() {
+        let paths = Array(selectedDestinations)
+        UserDefaults.standard.set(paths, forKey: destinationsKey)
+    }
+
+    private func loadSelectedDestinations() {
+        if let saved = UserDefaults.standard.stringArray(forKey: destinationsKey) {
+            selectedDestinations = Set(saved)
+        }
     }
 }

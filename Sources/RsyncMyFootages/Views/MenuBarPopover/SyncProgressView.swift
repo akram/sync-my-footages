@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct SyncProgressView: View {
+    @Environment(AppState.self) private var appState
     let job: SyncJob
 
     var body: some View {
@@ -13,6 +14,16 @@ struct SyncProgressView: View {
                 Text(job.status.label)
                     .font(.caption2)
                     .foregroundStyle(.secondary)
+                if job.status.isActive {
+                    Button {
+                        appState.cancelSync(jobID: job.id)
+                    } label: {
+                        Image(systemName: "xmark.circle.fill")
+                            .foregroundStyle(.red)
+                    }
+                    .buttonStyle(.borderless)
+                    .help("Cancel sync")
+                }
             }
 
             ProgressView(value: job.progress.overallFraction)

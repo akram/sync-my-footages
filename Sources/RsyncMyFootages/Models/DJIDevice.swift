@@ -3,7 +3,7 @@ import Foundation
 /// Represents a type of DJI capture device
 enum DJIDeviceType: String, Codable, CaseIterable, Sendable {
     case osmoPocket3 = "Osmo Pocket 3"
-    case action5Pro = "Action 5 Pro"
+    case action5Pro = "Osmo Action 5 Pro"
     case neo2 = "Neo 2"
     case unknown = "Unknown DJI Device"
 

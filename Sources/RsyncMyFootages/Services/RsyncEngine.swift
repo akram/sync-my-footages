@@ -70,14 +70,29 @@ actor RsyncEngine {
         isCancelled = false
         let startTime = Date()
 
+        // Detect if source is a file or directory
+        var isDir: ObjCBool = false
+        FileManager.default.fileExists(atPath: source.path, isDirectory: &isDir)
+
+        let sourcePath: String
+        let destPath: String
+        if isDir.boolValue {
+            // Directory: trailing slash means "copy contents"
+            sourcePath = source.path.hasSuffix("/") ? source.path : source.path + "/"
+            destPath = destination.path.hasSuffix("/") ? destination.path : destination.path + "/"
+        } else {
+            // Single file: no trailing slash, destination is a directory
+            sourcePath = source.path
+            destPath = destination.path.hasSuffix("/") ? destination.path : destination.path + "/"
+        }
+
         let args = [
-            "-r",
             "-t",
             "--progress",
             "--itemize-changes",
-        ] + excludeArgs() + [
-            source.path.hasSuffix("/") ? source.path : source.path + "/",
-            destination.path.hasSuffix("/") ? destination.path : destination.path + "/",
+        ] + (isDir.boolValue ? ["-r"] : []) + excludeArgs() + [
+            sourcePath,
+            destPath,
         ]
 
         let process = Process()

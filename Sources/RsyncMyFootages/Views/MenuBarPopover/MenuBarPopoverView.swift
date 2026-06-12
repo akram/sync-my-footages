@@ -39,9 +39,20 @@ struct MenuBarPopoverView: View {
             // Active syncs
             if !appState.activeSyncJobs.isEmpty {
                 Divider()
-                Text("Active Syncs")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                HStack {
+                    Text("Active Syncs")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                    Spacer()
+                    if appState.activeSyncJobs.contains(where: { !$0.status.isActive }) {
+                        Button("Clear") {
+                            appState.activeSyncJobs.removeAll { !$0.status.isActive }
+                        }
+                        .buttonStyle(.borderless)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    }
+                }
                 ForEach(appState.activeSyncJobs) { job in
                     SyncProgressView(job: job)
                 }
@@ -49,51 +60,41 @@ struct MenuBarPopoverView: View {
 
             Divider()
 
-            // Footer actions
-            HStack {
-                Button("Dashboard") {
-                    WindowManager.shared.openDashboard(appState: appState)
+            // Footer
+            HStack(spacing: 0) {
+                Menu {
+                    Button("Dashboard") {
+                        WindowManager.shared.openDashboard(appState: appState)
+                    }
+                    Button("Duplicates") {
+                        WindowManager.shared.openDuplicates()
+                    }
+                    Button("Projects") {
+                        WindowManager.shared.openApplyProjects(appState: appState)
+                    }
+                    Divider()
+                    Button("Settings...") {
+                        WindowManager.shared.openSettings(appState: appState)
+                    }
+                    Divider()
+                    Button(appState.isDemoActive ? "Stop Demo" : "Demo Mode") {
+                        appState.toggleDemo()
+                    }
+                    Divider()
+                    Button("Quit") {
+                        NSApplication.shared.terminate(nil)
+                    }
+                } label: {
+                    EmptyView()
                 }
-                .buttonStyle(.borderless)
+                .menuStyle(.borderlessButton)
+                .frame(width: 16)
 
-                Button("Duplicates") {
-                    WindowManager.shared.openDuplicates()
-                }
-                .buttonStyle(.borderless)
-
-                Button("Projects") {
-                    WindowManager.shared.openApplyProjects(appState: appState)
-                }
-                .buttonStyle(.borderless)
+                Text("More")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
 
                 Spacer()
-
-                Button("Settings...") {
-                    WindowManager.shared.openSettings(appState: appState)
-                }
-                .buttonStyle(.borderless)
-
-                Button("Quit") {
-                    NSApplication.shared.terminate(nil)
-                }
-                .buttonStyle(.borderless)
-            }
-            .font(.caption)
-
-            // Demo mode toggle
-            HStack {
-                Button(appState.isDemoActive ? "Stop Demo" : "Demo Mode") {
-                    appState.toggleDemo()
-                }
-                .buttonStyle(.borderless)
-                .font(.caption2)
-                .foregroundStyle(appState.isDemoActive ? .orange : .secondary)
-
-                if appState.isDemoActive {
-                    Text("Simulated device & destination active")
-                        .font(.caption2)
-                        .foregroundStyle(.orange)
-                }
             }
         }
         .padding()

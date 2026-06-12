@@ -189,12 +189,19 @@ enum FileOrganizer {
         renameWithProjectTitles(in: directory, separator: separator)
 
         cleanEmptyDirectories(in: directory)
+        refreshFinder(directory)
         progressHandler("Done", 1.0)
         return (moved, skipped, errors)
     }
 
     /// Simple rename: for each immediate subfolder that has a PROJECT.md,
     /// rename the folder to include the title. Skip if already named correctly.
+    /// Rename date folders that contain a PROJECT.md to include the project title.
+    /// Can be called from sync or reorganize. Recurses into subdirectories.
+    static func applyProjectTitles(in directory: URL, separator: String = " - ") {
+        renameWithProjectTitles(in: directory, separator: separator)
+    }
+
     private static func renameWithProjectTitles(in directory: URL, separator: String) {
         let fm = FileManager.default
         guard let contents = try? fm.contentsOfDirectory(
@@ -263,6 +270,15 @@ enum FileOrganizer {
             } catch {
                 log("  FAILED: \(error)")
             }
+        }
+    }
+
+    /// Tell Finder to refresh a folder so renamed directories appear immediately
+    static func refreshFinder(_ directory: URL) {
+        let script = "tell application \"Finder\" to update folder (POSIX file \"\(directory.path)\" as alias)"
+        if let appleScript = NSAppleScript(source: script) {
+            var error: NSDictionary?
+            appleScript.executeAndReturnError(&error)
         }
     }
 

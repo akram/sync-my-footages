@@ -60,7 +60,7 @@ struct SyncProgress: Sendable {
     var totalFiles: Int = 0
 
     var overallFraction: Double {
-        guard totalFiles > 0 else { return 0 }
+        guard totalFiles > 0 else { return filesTransferred == 0 ? 1.0 : 0 }
         return Double(filesTransferred) / Double(totalFiles)
     }
 
